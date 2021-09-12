@@ -15,6 +15,8 @@ class VacancyController: UIViewController {
     
     var vacancies = [Items?]()
     
+    var isLoading = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Вакансии на HH.ru"
@@ -50,6 +52,11 @@ class VacancyController: UIViewController {
 }
 
 extension VacancyController: UITableViewDelegate, UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        2
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return vacancies.count
 //        return 3
@@ -65,5 +72,32 @@ extension VacancyController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offSetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        
+        if (offSetY > contentHeight - scrollView.frame.height) && !isLoading {
+            loadMoreData()
+        }
+    }
+    
+    func loadMoreData() {
+        if !self.isLoading {
+            self.isLoading = true
+            DispatchQueue.global().async {
+                sleep(2)
+                
+                self.service.parse { (data) in
+                    self.vacancies.append(contentsOf: data)
+                }
+                
+                DispatchQueue.main.async {
+                    print("Количество вакансий: \(self.vacancies.count)")
+                    self.tableView.reloadData()
+                    self.isLoading = false
+                }
+            }
+        }
+    }
     
 }

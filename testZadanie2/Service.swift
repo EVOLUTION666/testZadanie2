@@ -13,7 +13,7 @@ struct Service {
         
         URLSession.shared.dataTask(with: url!) { (data, response, error) in
             if error != nil {
-                print(error?.localizedDescription)
+                print(error?.localizedDescription ?? "Неизвестная ошибка")
                 return
             }
             
