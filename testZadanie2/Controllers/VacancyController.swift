@@ -21,7 +21,6 @@ class VacancyController: UIViewController {
         super.viewDidLoad()
         title = "Вакансии на HH.ru"
         configureTableView()
-        
         service.parse { data in
             
             self.vacancies = data
@@ -29,7 +28,6 @@ class VacancyController: UIViewController {
                 self.tableView.reloadData()
             }
         }
-        
     }
 
     func configureTableView() {
@@ -54,12 +52,11 @@ class VacancyController: UIViewController {
 extension VacancyController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        2
+        1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return vacancies.count
-//        return 3
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
